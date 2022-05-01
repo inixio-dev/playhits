@@ -1,0 +1,28 @@
+{
+  "root": "apps/play-e2e",
+  "sourceRoot": "apps/play-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/play-e2e/cypress.json",
+        "devServerTarget": "play:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "play:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/play-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["play"]
+}
