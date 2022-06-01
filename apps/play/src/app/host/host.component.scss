@@ -1,0 +1,36 @@
+.loginInfo {
+    margin: 20px 5px;
+    text-align: center;
+}
+
+.qr {
+    max-width: 256px;
+}
+.qr > p {
+    text-align: center;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    flex-grow: 1;
+}
+
+.table-container {
+    width: 100%;
+    padding: 25px;
+}
+
+#image {
+    padding: 0;
+    width: 60px;
+}
+
+#check {
+    width: 25px;
+}
+
+nz-table, table {
+    max-width: 100%;
+}

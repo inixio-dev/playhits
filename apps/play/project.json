@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/play",
         "index": "apps/play/src/index.html",
@@ -14,8 +16,14 @@
         "polyfills": "apps/play/src/polyfills.ts",
         "tsConfig": "apps/play/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/play/src/favicon.ico", "apps/play/src/assets"],
-        "styles": ["apps/play/src/styles.scss"],
+        "assets": [
+          "apps/play/src/favicon.ico",
+          "apps/play/src/assets"
+        ],
+        "styles": [
+          "./node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+          "apps/play/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -75,12 +83,17 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/play/**/*.ts", "apps/play/**/*.html"]
+        "lintFilePatterns": [
+          "apps/play/**/*.ts",
+          "apps/play/**/*.html"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/play"],
+      "outputs": [
+        "coverage/apps/play"
+      ],
       "options": {
         "jestConfig": "apps/play/jest.config.ts",
         "passWithNoTests": true

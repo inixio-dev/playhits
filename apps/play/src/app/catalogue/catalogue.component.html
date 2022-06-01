@@ -1,0 +1,43 @@
+<div>
+    <div *ngIf="hostId; else info">
+        <!--Correctly navigated-->
+        <div *ngIf="host; else loading">
+            <!--Already fetched catalogue-->
+            <div *ngIf="songs; else catalogueslist">
+                <div class="go-back grad" (click)="goBack()">
+                    <div class="song-title">Volver</div>
+                </div>
+                <div class="song grad" *ngFor="let s of songs">
+                    <div class="song-info">
+                        <div class="song-title">{{s.track.name}}</div>
+                        <div class="song-singer">{{s.track.artists[0].name}}</div>
+                    </div>
+                    <div class="song-add" (click)="addSongToQueue(s.track.uri)">
+                        <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
+                    </div>
+                </div>
+            </div>
+            <ng-template #catalogueslist>
+                <h3 class="catalogue-title">Catálogo de {{host.name}}</h3>
+                <div class="catalogue">
+                    <div (click)="getSongsFromPlaylist(c.spotifyPlaylistId)" class="catalogue-item grad" *ngFor="let c of host.catalogues">
+                        <img width="100%" height="100%" [src]="c.imageUrl"/>
+                        <div class="name">{{c.name}}</div>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <ng-template #loading>
+            Loading
+        </ng-template>
+    </div>
+    <ng-template #info>
+        <div style="margin: 5%; text-align: justify;">
+            <p>Esto es PlayHits, la plataforma en la que podrás compartir tu cola de Spotify para que otra gente añada caciones de tu catálogo. De momento estamos en fase de pruebas, pero planeamos abrir la plataforma a más usuarios próximamente.</p>
+            <p>Si eres el dueño de un bar, una discoteca o simplemente quieres usar PlayHits en una fiesta con amigos, ponte en contacto con nosotros en <a href="mailto:inixio97@gmail.com">este email</a></p>
+        </div>
+        <div style="text-align: center; font-size: xx-large;">
+            <i nz-icon nzType="qrcode" nzTheme="outline"></i>
+        </div>
+    </ng-template>
+</div>

@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+@font-face {
+    font-family: "Teko";
+    src: local("Teko"), url(./assets/fonts/Teko/Teko/Teko-Light.ttf) format("truetype");
+}
+
+
+.grad, .ant-btn {
+    background-color: #d4418e !important;
+    background-image: linear-gradient(315deg, #d4418e 0%, #6906c5 74%) !important;
+}
+
+.ant-btn {
+    border-width: 0;
+}

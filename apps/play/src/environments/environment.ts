@@ -4,6 +4,10 @@
 
 export const environment = {
   production: false,
+  apiUrl: `http://192.168.1.16:3333/api`,
+  appUrl: 'http://192.168.1.16:4200',
+  client_id: 'c89100b02cd741c893c8454d85cd931c',
+  redirect_url: 'http://localhost:4200/host'
 };
 
 /*

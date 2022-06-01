@@ -5,5 +5,15 @@
     "api-interfaces": "libs/api-interfaces",
     "play": "apps/play",
     "play-e2e": "apps/play-e2e"
-  }
+  },
+  "styles": [
+    "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
+  ],
+  "assets": [
+    {
+      "glob": "**/*",
+      "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+      "output": "/assets/"
+    }
+  ]
 }
