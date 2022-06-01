@@ -21,6 +21,7 @@ services:
   api:
     image: playhits-api:0.1
     container_name: playhits_api
+    restart: always
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -42,8 +43,6 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
     networks:
       - playhits_net
-  certbot:
-    image: certbot/certbot
 volumes:
   my-db:
 networks:
