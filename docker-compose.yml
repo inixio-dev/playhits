@@ -16,8 +16,6 @@ services:
       - MYSQL_DATABASE="playhits"
     volumes:
       - my-db:/var/lib/mysql
-    networks:
-      - playhits_net
   api:
     image: playhits-api:0.1
     container_name: playhits_api
@@ -41,10 +39,5 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
       - /etc/letsencrypt:/etc/letsencrypt
-    networks:
-      - playhits_net
 volumes:
   my-db:
-networks:
-  playhits_net:
-    external: true
