@@ -13,6 +13,7 @@ export class CatalogueComponent implements OnInit {
   hostId?: string| undefined;
   host?: any | undefined;
   songs: any[] | null | undefined;
+  searchTerm: string = '';
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((qp: any) => {

@@ -4,10 +4,13 @@
         <div *ngIf="host; else loading">
             <!--Already fetched catalogue-->
             <div *ngIf="songs; else catalogueslist">
+                <div class="search-container">
+                    <input class="search" [(ngModel)]="searchTerm" placeholder="Busca una canción o artista" />
+                </div>
                 <div class="go-back grad" (click)="goBack()">
                     <div class="song-title">Volver</div>
                 </div>
-                <div class="song grad" *ngFor="let s of songs">
+                <div class="song grad" *ngFor="let s of songs | searchSong:searchTerm">
                     <div class="song-info">
                         <div class="song-title">{{s.track.name}}</div>
                         <div class="song-singer">{{s.track.artists[0].name}}</div>

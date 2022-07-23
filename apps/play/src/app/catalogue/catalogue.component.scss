@@ -12,6 +12,20 @@
     text-align: center;
 }
 
+.search-container {
+    display: flex;
+    padding: 0 10px;
+    margin: 5px 0;
+    padding-left: 10px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.search {
+    border-radius: 25px;
+    width: 100%;
+}
+
 .catalogue-item {
     display: flex;
     flex-direction: column;

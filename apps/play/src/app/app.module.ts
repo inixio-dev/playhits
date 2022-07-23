@@ -26,6 +26,7 @@ import {
   PlusCircleFill,
   QrcodeOutline
 } from '@ant-design/icons-angular/icons';
+import { SearchSongPipe } from './pipes/search.pipe';
 registerLocaleData(es);
 
 const routes: Routes = [
@@ -53,6 +54,7 @@ const routes: Routes = [
     CatalogueComponent,
     HostComponent,
     LoginComponent,
+    SearchSongPipe
   ],
   imports: [
     BrowserModule,
