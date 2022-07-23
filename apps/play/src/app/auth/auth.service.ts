@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   authorizeSpotify() {
-    window.location.href = `https://accounts.spotify.com/authorize?client_id=${environment.client_id}&response_type=code&redirect_uri=${environment.redirect_url}&scope=user-modify-playback-state`;
+    window.location.href = `https://accounts.spotify.com/authorize?client_id=${environment.client_id}&response_type=code&redirect_uri=${environment.redirect_url}&scope=user-modify-playback-state playlist-read-collaborative playlist-read-private`;
   }
 
   saveTokenFromCode(code: string) {
