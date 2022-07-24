@@ -98,4 +98,8 @@ export class HostComponent implements OnInit {
       }
     });
   }
+
+  loadDefaultCover(event: any) {
+    event.target.src = 'assets/default-cover.png';
+  }
 }

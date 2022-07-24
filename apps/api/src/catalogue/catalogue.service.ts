@@ -13,8 +13,8 @@ export class CatalogueService {
     return this.catalogueRepository.save([
       {
         spotifyPlaylistId: createCatalogueDto.id,
-        name: createCatalogueDto.name,
-        imageUrl: createCatalogueDto.images[0].url,
+        name: createCatalogueDto.name.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, ''),
+        imageUrl: createCatalogueDto.images[0]?.url || 'assets/default-cover.png',
         host: req.user.host
       }
     ]);
