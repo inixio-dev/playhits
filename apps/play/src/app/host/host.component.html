@@ -32,7 +32,7 @@
                         [nzChecked]="setOfCheckedId.has(playlist.id)"
                         (nzCheckedChange)="onItemChecked(playlist.id, $event)"
                     ></td>
-                    <td id="image"><img height="60px" width="60px" style="margin: 0;" [src]="playlist.images[0].url"/></td>
+                    <td id="image"><img height="60px" width="60px" style="margin: 0;" [src]="playlist.images[0]?.url"/></td>
                     <td>{{ playlist.name }}</td>
                     </tr>
                 </tbody>
