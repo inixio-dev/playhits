@@ -10,6 +10,7 @@ export class CatalogueService {
   constructor(@InjectRepository(Catalogue) private catalogueRepository: Repository<Catalogue>) {}
 
   create(createCatalogueDto: any, req: any) {
+    console.log(`Creando ${createCatalogueDto.name} (${createCatalogueDto.name.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '')})`)
     return this.catalogueRepository.save([
       {
         spotifyPlaylistId: createCatalogueDto.id,
