@@ -9,7 +9,7 @@ export const environment = {
     looseMatching: false
   },
   database: {
-    host: env.MYSQL_HOST || '127.0.0.3',
+    host: env.MYSQL_HOST || '127.0.0.1',
     port: env.MYSQL_PORT || 3306,
     username: env.MYSQL_USER || 'root',
     password: env.MYSQL_PASSWORD || 'root',
