@@ -49,21 +49,26 @@ export class SpotifyService {
         };
     }
 
-    async getSongsFromPlaylist(hostId: string, id: string) {
+    async getSongsFromPlaylist(hostId: string, id: string, page = 0, songs = []) {
         const spotifyTokens = await this.getSpotifyTokens({user: {id: hostId}});
         try {
-            const response = await axios.get(`https://api.spotify.com/v1/playlists/${id}/tracks?limit=50`, {
+            const response = await axios.get(`https://api.spotify.com/v1/playlists/${id}/tracks?limit=50&offset=${50*page}`, {
                 headers: {
                     'Authorization': `Bearer ${spotifyTokens.spotfyToken}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             });
-            return response.data;
+            response.data.items = [...response.data.items, ...songs];
+            if (response.data.next) {
+                return await this.getSongsFromPlaylist(hostId, id, page + 1, response.data.items);
+            } else {
+                return response.data;
+            }
         } catch(err) {
             if (err.response.status === 401) {
                 await this.refreshToken(hostId, spotifyTokens.spotifyRefreshToken);
-                return await this.getSongsFromPlaylist(hostId, id);
+                return await this.getSongsFromPlaylist(hostId, id, page, songs);
             } else {
                 throw new Error();
             }
