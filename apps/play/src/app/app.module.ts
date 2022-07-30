@@ -27,6 +27,7 @@ import {
   QrcodeOutline
 } from '@ant-design/icons-angular/icons';
 import { SearchSongPipe } from './pipes/search.pipe';
+import { ngxLoadingAnimationTypes, NgxLoadingModule } from 'ngx-loading';
 registerLocaleData(es);
 
 const routes: Routes = [
@@ -69,6 +70,9 @@ const routes: Routes = [
     NzInputModule,
     NzTableModule,
     NzIconModule.forRoot([PlusCircleFill, QrcodeOutline]),
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.cubeGrid
+    }),
     QRCodeModule
   ],
   providers: [

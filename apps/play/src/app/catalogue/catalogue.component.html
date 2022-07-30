@@ -1,7 +1,7 @@
 <div>
     <div *ngIf="hostId; else info">
         <!--Correctly navigated-->
-        <div *ngIf="host; else loading">
+        <div *ngIf="!loading; else loadingSpinner">
             <!--Already fetched catalogue-->
             <div *ngIf="songs; else catalogueslist">
                 <div class="search-container">
@@ -30,8 +30,8 @@
                 </div>
             </ng-template>
         </div>
-        <ng-template #loading>
-            Loading
+        <ng-template #loadingSpinner>
+            <ngx-loading class="grad" [show]="true"></ngx-loading>
         </ng-template>
     </div>
     <ng-template #info>

@@ -61,10 +61,8 @@ export class SpotifyService {
             });
             response.data.items = [...response.data.items, ...songs];
             if (response.data.next) {
-                console.log('Hay más', response.data.items.length);
                 return await this.getSongsFromPlaylist(hostId, id, page + 1, response.data.items);
             } else {
-                console.log('No hay más', response.data);
                 return response.data;
             }
         } catch(err) {

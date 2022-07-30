@@ -14,17 +14,17 @@ export class CatalogueComponent implements OnInit {
   host?: any | undefined;
   songs: any[] | null | undefined;
   searchTerm: string = '';
+  loading: boolean = true;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((qp: any) => {
       this.hostId = qp.host;
       console.log(qp.host);
       if (this.hostId) {
-        // fetch host
         this.catalogueService.getCatalogueFromHost(this.hostId).subscribe({
           next: (res) => {
-            console.log(res);
             this.host = res;
+            this.loading = false;
           }
         });
       }
@@ -32,15 +32,17 @@ export class CatalogueComponent implements OnInit {
   }
 
   getSongsFromPlaylist(playlistId: string) {
+    this.loading = true;
     this.catalogueService.getSongsFromPlaylist(this.host.id, playlistId).subscribe({
       next: (res: any) => {
-        console.log(res);
+        this.loading = false;
         this.songs = res.items;
       }
     });
   }
 
   addSongToQueue(songUrl: string) {
+    this.loading = true;
     this.catalogueService.addSongToQueue(this.host.id, songUrl).subscribe({
       next: (res) => {
         alert('¡Tu canción se ha añadido a la cola!')
@@ -50,12 +52,15 @@ export class CatalogueComponent implements OnInit {
       },
       complete: () => {
         this.songs = null;
+        this.loading = false;
+        this.searchTerm = '';
       }
     })
   }
 
   goBack() {
     this.songs = null;
+    this.searchTerm = '';
   }
 
 }
