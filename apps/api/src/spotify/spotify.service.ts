@@ -68,10 +68,11 @@ export class SpotifyService {
                 return response.data;
             }
         } catch(err) {
-            if (err.response.status === 401) {
+            if (err.response?.status === 401) {
                 await this.refreshToken(hostId, spotifyTokens.spotifyRefreshToken);
                 return await this.getSongsFromPlaylist(hostId, id, page, songs);
             } else {
+                console.log(err);
                 throw new Error();
             }
         };
