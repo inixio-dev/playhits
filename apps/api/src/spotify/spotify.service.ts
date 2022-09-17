@@ -77,17 +77,24 @@ export class SpotifyService {
     }
 
     async addSongToQueue(id: string, songUrl: string) {
+        const alreadyInQueue = await this.checkIfAlreadyInQueue(id, songUrl);
+        if (alreadyInQueue) {
+            return {
+                message: 'Esta canción ya está en la cola, sonará en breve'
+            }
+        }
         const spotifyTokens = await this.getSpotifyTokens({user: {id}});
-        console.log('Tokens', spotifyTokens);
         try {
-            const response = await axios.post(`	https://api.spotify.com/v1/me/player/queue?uri=${songUrl}`, {}, {
+            await axios.post(`https://api.spotify.com/v1/me/player/queue?uri=${songUrl}`, {}, {
                 headers: {
                     'Authorization': `Bearer ${spotifyTokens.spotfyToken}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             });
-            return response.data;
+            return {
+                message: '¡La canción se ha añadido a la cola! Sonará en breve'
+            };
         } catch(err) {
             console.log(err.response)
             if (err.response.status === 401) {
@@ -99,5 +106,43 @@ export class SpotifyService {
         };
     }
 
+    async getQueue(id: string) {
+        const spotifyTokens = await this.getSpotifyTokens({user: {id}});
+        try {
+            const response = await axios.get(`https://api.spotify.com/v1/me/player/queue`, {
+                headers: {
+                    'Authorization': `Bearer ${spotifyTokens.spotfyToken}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            return response.data;
+        } catch(err) {
+            console.log(err.response)
+            if (err.response.status === 401) {
+                await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
+                return await this.getQueue(id);
+            } else {
+                throw new Error();
+            }
+        };
+    }
+
+    async checkIfAlreadyInQueue(id: string, songUrl: string) {
+        const queue = await this.getQueue(id);
+        
+        if (queue.currently_playing && queue.currently_playing.uri === songUrl) {
+            return true;
+        }
+
+        const inQueue = queue.queue.find(t => t.uri === songUrl);
+
+        if (inQueue) {
+            return true;
+        }
+
+        return false;
+
+    }
 
 }

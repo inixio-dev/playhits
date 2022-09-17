@@ -18,14 +18,16 @@ export class HostService {
   }
 
   async findOne(id: string): Promise<HostDto> {
+    console.log('Host', id)
     const host = await this.hostsRepository.findOne(
       {
-        id
+        username: id
       }, 
       {
         relations: ['catalogues']
       }
     ).then((host: Host) => {
+      console.log(host);
       return {
         name: host.name,
         username: host.username,

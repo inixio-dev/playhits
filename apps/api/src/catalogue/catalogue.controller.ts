@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } fro
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CatalogueService } from './catalogue.service';
-import { CreateCatalogueDto } from './dto/create-catalogue.dto';
 
 @Controller('catalogue')
 @ApiTags('Catalogue')

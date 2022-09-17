@@ -5,7 +5,6 @@ import { Host } from '../host/entities/host.entity';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { HostDto } from '../host/dto/host.dto';
-import { HttpService } from '@nestjs/axios';
 import { environment } from '../environments/environment';
 import qs = require('qs');
 import axios from 'axios';
@@ -15,7 +14,7 @@ export class AuthService {
 
     constructor(
         @InjectRepository(Host) private hostRepository: Repository<Host>,
-        private jwtService: JwtService, private httpClient: HttpService) {}
+        private jwtService: JwtService) {}
 
     async login(loginInfo: LoginDto) {
         const host = await this.hostRepository.findOne({

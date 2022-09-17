@@ -44,8 +44,8 @@ export class CatalogueComponent implements OnInit {
   addSongToQueue(songUrl: string) {
     this.loading = true;
     this.catalogueService.addSongToQueue(this.host.id, songUrl).subscribe({
-      next: (res) => {
-        alert('¡Tu canción se ha añadido a la cola!')
+      next: (res: any) => {
+        alert(res.message)
       },
       error: (err) => {
         alert('Vaya... Parece que ha habido un error. Por favor, vuelve a intentarlo más adelante')
