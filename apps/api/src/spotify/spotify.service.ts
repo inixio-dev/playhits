@@ -83,6 +83,12 @@ export class SpotifyService {
                 message: 'Esta canción ya está en la cola, sonará en breve'
             }
         }
+        const recentlyPlayed = await this.checkIfRecentlyPlayed(id, songUrl);
+        if (recentlyPlayed) {
+            return {
+                message: 'Esta canción ha sonado hace poco. Prueba a pedir otra canción o espera un rato y pídela de nuevo'
+            }
+        }
         const spotifyTokens = await this.getSpotifyTokens({user: {id}});
         try {
             await axios.post(`https://api.spotify.com/v1/me/player/queue?uri=${songUrl}`, {}, {
@@ -128,6 +134,13 @@ export class SpotifyService {
         };
     }
 
+    async getQueueLength(id: string) {
+        const queue = await this.getQueue(id);
+        return {
+            queueLength: queue.queue.length
+        }
+    }
+
     async checkIfAlreadyInQueue(id: string, songUrl: string) {
         const queue = await this.getQueue(id);
         
@@ -143,6 +156,39 @@ export class SpotifyService {
 
         return false;
 
+    }
+
+    async getRecentlyPlayed(id: string) {
+        const spotifyTokens = await this.getSpotifyTokens({user: {id}});
+        try {
+            const response = await axios.get(`https://api.spotify.com/v1/me/player/recently-played`, {
+                headers: {
+                    'Authorization': `Bearer ${spotifyTokens.spotfyToken}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            return response.data;
+        } catch(err) {
+            console.log(err.response)
+            if (err.response.status === 401) {
+                await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
+                return await this.getRecentlyPlayed(id);
+            } else {
+                throw new Error();
+            }
+        };
+    }
+
+    async checkIfRecentlyPlayed(id: string, songUrl: string) {
+        const recentlyPlayed = await this.getRecentlyPlayed(id);
+        const played = recentlyPlayed.items.find(i => {
+            console.log(Object.keys(i.track))
+            console.log(i.track);
+            i.track.uri === songUrl
+        });
+        console.log(songUrl, played ? played.track.uri : 'No');
+        return played;
     }
 
 }

@@ -29,4 +29,9 @@ export class SpotifyController {
     async getQueue(@Param('hostId') hostId: string) {
         return this.spotifyService.getQueue(hostId);
     }
+
+    @Get('queue/length/:hostId')
+    async getQueueLength(@Param('hostId') hostId: string) {
+        return this.spotifyService.getQueueLength(hostId);
+    }
 }
