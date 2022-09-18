@@ -12,7 +12,7 @@ export class CatalogueComponent implements OnInit {
 
   hostId?: string| undefined;
   host?: any | undefined;
-  songs: any[] | null | undefined;
+  songs?: any;
   searchTerm: string = '';
   loading: boolean = true;
 
@@ -24,7 +24,13 @@ export class CatalogueComponent implements OnInit {
         this.catalogueService.getCatalogueFromHost(this.hostId).subscribe({
           next: (res) => {
             this.host = res;
-            this.loading = false;
+            this.catalogueService.getSongsFromHost(this.host.id).subscribe({
+              next: (res: any) => {
+                this.songs = res;
+                console.log(this.songs);
+                this.loading = false;
+              }
+            });
           }
         });
       }
@@ -51,7 +57,6 @@ export class CatalogueComponent implements OnInit {
         alert('Vaya... Parece que ha habido un error. Por favor, vuelve a intentarlo más adelante')
       },
       complete: () => {
-        this.songs = null;
         this.loading = false;
         this.searchTerm = '';
       }

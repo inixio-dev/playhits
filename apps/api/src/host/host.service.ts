@@ -44,6 +44,12 @@ export class HostService {
     }
   }
 
+  find() {
+    return this.hostsRepository.find({
+      relations: ['catalogues']
+    });
+  }
+
   update(id: number, updateHostDto: UpdateHostDto) {
     return `This action updates a #${id} host`;
   }

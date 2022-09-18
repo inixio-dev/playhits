@@ -8,6 +8,7 @@ import { Subscriber as EncryptedColumnSubscriber} from 'typeorm-encrypted-column
 @Module({
   imports: [TypeOrmModule.forFeature([Host])],
   controllers: [HostController],
-  providers: [HostService, EncryptedColumnSubscriber]
+  providers: [HostService, EncryptedColumnSubscriber],
+  exports: [HostService]
 })
 export class HostModule {}

@@ -3,24 +3,21 @@
         <!--Correctly navigated-->
         <div *ngIf="!loading; else loadingSpinner">
             <!--Already fetched catalogue-->
-            <div *ngIf="songs; else catalogueslist">
+                <h3 class="catalogue-title">Catálogo de {{host.name}}</h3>
                 <div class="search-container">
                     <input class="search" [(ngModel)]="searchTerm" placeholder="Busca una canción o artista" />
                 </div>
-                <div class="go-back grad" (click)="goBack()">
-                    <div class="song-title">Volver</div>
-                </div>
                 <div class="song grad" *ngFor="let s of songs | searchSong:searchTerm">
                     <div class="song-info">
-                        <div class="song-title">{{s.track.name}}</div>
-                        <div class="song-singer">{{s.track.artists[0].name}}</div>
+                        <div class="song-title">{{s.title}}</div>
+                        <div class="song-singer">{{s.artist}}</div>
                     </div>
-                    <div class="song-add" (click)="addSongToQueue(s.track.uri)">
+                    <div class="song-add" (click)="addSongToQueue(s.spotifySongUrl)">
                         <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
                     </div>
                 </div>
             </div>
-            <ng-template #catalogueslist>
+            <!--<ng-template #catalogueslist>
                 <h3 class="catalogue-title">Catálogo de {{host.name}}</h3>
                 <div class="catalogue">
                     <div (click)="getSongsFromPlaylist(c.spotifyPlaylistId)" class="catalogue-item grad" *ngFor="let c of host.catalogues">
@@ -28,8 +25,7 @@
                         <div class="name">{{c.name}}</div>
                     </div>
                 </div>
-            </ng-template>
-        </div>
+            </ng-template>-->
         <ng-template #loadingSpinner>
             <ngx-loading class="grad" [show]="true"></ngx-loading>
         </ng-template>

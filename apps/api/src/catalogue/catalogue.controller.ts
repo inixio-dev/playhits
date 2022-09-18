@@ -28,7 +28,7 @@ export class CatalogueController {
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') spotifyPlaylistId: string) {
-    return this.catalogueService.remove(spotifyPlaylistId);
+  remove(@Param('id') spotifyPlaylistId: string, @Req() req: any) {
+    return this.catalogueService.remove(spotifyPlaylistId, req);
   }
 }
