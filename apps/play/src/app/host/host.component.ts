@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
@@ -16,7 +17,7 @@ export class HostComponent implements OnInit {
 
   host?: HostDto;
   myPlaylists?: MyPlaylistsDto;
-  setOfCheckedId = new Set<any>();
+  setOfCheckedId = new Set<string>();
   currentPage = 1;
   appUrl = environment.appUrl;
 
@@ -28,10 +29,10 @@ export class HostComponent implements OnInit {
         this.host = res;
         this.host?.catalogues.forEach(c => this.setOfCheckedId.add(c.spotifyPlaylistId));
         this.route.queryParams.subscribe((qp) => {
-          const {code, status, error} = qp;
+          const {code} = qp;
           if (code) {
             this.authService.saveTokenFromCode(code).pipe(take(1)).subscribe({
-              next: (res) => {
+              next: () => {
                 window.location.reload();
               },
               error: () => {
@@ -68,7 +69,7 @@ export class HostComponent implements OnInit {
       request = this.hostService.removeFromCatalogue(id);
     }
     request.pipe(take(1)).subscribe({
-      next: (res) => {
+      next: () => {
         if (selected) {
           this.setOfCheckedId.add(id);
         } else {

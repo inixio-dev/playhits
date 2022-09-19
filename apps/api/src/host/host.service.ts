@@ -1,10 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundError } from 'rxjs';
 import { Repository } from 'typeorm';
-import { CreateHostDto } from './dto/create-host.dto';
 import { HostDto } from './dto/host.dto';
-import { UpdateHostDto } from './dto/update-host.dto';
 import { Host } from './entities/host.entity';
 
 @Injectable()

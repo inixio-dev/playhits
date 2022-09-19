@@ -11,7 +11,7 @@ export class SpotifyService {
 
     constructor(private authService: AuthService, @InjectRepository(Host) private hostsRpository: Repository<Host>, private http: HttpService) {}
 
-    private async getSpotifyTokens(req: any) {
+    private async getSpotifyTokens(req) {
         const {id} = req.user;
         if (!id) {
             throw new UnauthorizedException();
@@ -27,7 +27,7 @@ export class SpotifyService {
         return await this.authService.refreshSpotifyToken(refreshToken, userId);
     }
 
-    async getMyPlaylists(req: any, page = 0) {
+    async getMyPlaylists(req, page = 0) {
         const spotifyTokens = await this.getSpotifyTokens(req);
         try {
             const response = await axios.get(`https://api.spotify.com/v1/me/playlists?offset=${10*page}&limit=10`, {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CatalogueService } from './catalogue.service';
@@ -17,14 +18,14 @@ export class CatalogueComponent implements OnInit {
   loading = true;
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((qp: any) => {
-      this.hostId = qp.host;
+    this.route.queryParams.subscribe((qp) => {
+      this.hostId = qp['host'];
       if (this.hostId) {
         this.catalogueService.getCatalogueFromHost(this.hostId).subscribe({
           next: (res) => {
             this.host = res;
             this.catalogueService.getSongsFromHost(this.host.id).subscribe({
-              next: (res: any) => {
+              next: (res) => {
                 this.songs = res;
                 this.loading = false;
               }
@@ -51,7 +52,7 @@ export class CatalogueComponent implements OnInit {
       next: (res: any) => {
         alert(res.message)
       },
-      error: (err) => {
+      error: () => {
         alert('Vaya... Parece que ha habido un error. Por favor, vuelve a intentarlo más adelante')
       },
       complete: () => {

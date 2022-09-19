@@ -1,4 +1,5 @@
-import { Injectable, UnauthorizedException, Request } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Host } from '../host/entities/host.entity';
@@ -62,7 +63,7 @@ export class AuthService {
     }
 
     async refreshSpotifyToken(refresh_token: string, hostId: string) {
-        const {client_id, client_secret, redirect_uri} = environment;
+        const {client_id, client_secret} = environment;
         const res: any = await axios({
             method: 'post',
             headers: {
