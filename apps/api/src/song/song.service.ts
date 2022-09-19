@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { Repository } from 'typeorm';
 import { Catalogue } from '../catalogue/entities/catalogue.entity';
 import { Host } from '../host/entities/host.entity';
 import { HostService } from '../host/host.service';
 import { SpotifyService } from '../spotify/spotify.service';
-import { CreateSongDto } from './dto/create-song.dto';
-import { UpdateSongDto } from './dto/update-song.dto';
 import { Song } from './entities/song.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
@@ -18,12 +16,8 @@ export class SongService {
     this.populate();
   }
 
-  create(createSongDto: CreateSongDto) {
-    return 'This action adds a new song';
-  }
-
-  findAll(hostId: string) {
-    return this.songsRepository.find({
+  async findAll(hostId: string) {
+    const songs = await this.songsRepository.find({
       where: {
         host: {
           id: hostId
@@ -32,15 +26,14 @@ export class SongService {
       order: {
         title: 'ASC'
       }
+    });
+    return songs.filter((s, i) => {
+      if (s[i-1]) {
+        return s.title !== s[i-1].title || s.artist !== s[i-1].artist;
+      } else {
+        return true;
+      }
     })
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} song`;
-  }
-
-  update(id: number, updateSongDto: UpdateSongDto) {
-    return `This action updates a #${id} song`;
   }
 
   remove(host: Host, spotifyPlaylistId: string) {
@@ -54,9 +47,7 @@ export class SongService {
     const totalSongs = await this.songsRepository.count();
     if (totalSongs > 0) return;
     const hosts = await this.hostsService.find();
-    console.log('Total hosts', hosts);
     hosts.filter(h => h.spotifyToken && h.spotifyRefreshToken).forEach(h => {
-      console.log(h.name);
       h.catalogues.forEach(async c => {
           await this.addSongsFromCatalogue(h, c);
       })
@@ -67,7 +58,7 @@ export class SongService {
     const result = await this.spotifyService.getSongsFromPlaylist(h.id, c.spotifyPlaylistId);
     const songs: Song[] = result.items.map(({track}) => {
       const s: Song = {
-        id: randomUUID(),
+        id: uuidv4(),
         spotifyPlaylistId: c.spotifyPlaylistId,
         spotifySongId: track.id,
         spotifySongUrl: track.uri,

@@ -27,7 +27,6 @@ export class ApiAuthInterceptor implements HttpInterceptor {
 
   needsLogin() {
     const currentRoute = this.router.url;
-    console.log(currentRoute);
     return currentRoute === '/host';
   }
 }

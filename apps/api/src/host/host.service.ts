@@ -14,11 +14,7 @@ export class HostService {
     this.populate();
   }
 
-  create(createHostDto: CreateHostDto) {
-  }
-
   async findOne(id: string): Promise<HostDto> {
-    console.log('Host', id)
     const host = await this.hostsRepository.findOne(
       {
         username: id
@@ -27,7 +23,6 @@ export class HostService {
         relations: ['catalogues']
       }
     ).then((host: Host) => {
-      console.log(host);
       return {
         name: host.name,
         username: host.username,
@@ -50,14 +45,6 @@ export class HostService {
     });
   }
 
-  update(id: number, updateHostDto: UpdateHostDto) {
-    return `This action updates a #${id} host`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} host`;
-  }
-
   async populate() {
     const totalHosts = await this.hostsRepository.count();
     if (totalHosts === 0) {
@@ -66,13 +53,7 @@ export class HostService {
         username: 'bardemo',
         password: 'Admin1234',
         email: 'demo@inixio.dev'
-      })
-      .then(res => {
-        console.log('Result', res);
-      })
-      .catch(err => {
-        console.log('Error saving demo', err);
-      })
+      });
     }
   }
 }

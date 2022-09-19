@@ -13,13 +13,12 @@ export class CatalogueComponent implements OnInit {
   hostId?: string| undefined;
   host?: any | undefined;
   songs?: any;
-  searchTerm: string = '';
-  loading: boolean = true;
+  searchTerm = '';
+  loading = true;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((qp: any) => {
       this.hostId = qp.host;
-      console.log(qp.host);
       if (this.hostId) {
         this.catalogueService.getCatalogueFromHost(this.hostId).subscribe({
           next: (res) => {
@@ -27,7 +26,6 @@ export class CatalogueComponent implements OnInit {
             this.catalogueService.getSongsFromHost(this.host.id).subscribe({
               next: (res: any) => {
                 this.songs = res;
-                console.log(this.songs);
                 this.loading = false;
               }
             });

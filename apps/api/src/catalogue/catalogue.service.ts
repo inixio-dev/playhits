@@ -11,7 +11,6 @@ export class CatalogueService {
   constructor(@InjectRepository(Catalogue) private catalogueRepository: Repository<Catalogue>, private songsService: SongService) {}
 
   async create(createCatalogueDto: any, req: any) {
-    console.log(`Creando ${createCatalogueDto.name} (${createCatalogueDto.name.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '')})`)
     const catalogue = await this.catalogueRepository.save([
       {
         spotifyPlaylistId: createCatalogueDto.id,

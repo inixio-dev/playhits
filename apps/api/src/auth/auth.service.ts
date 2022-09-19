@@ -74,7 +74,7 @@ export class AuthService {
             url: "https://accounts.spotify.com/api/token",
         }).catch(e => console.log(e));
         const {access_token} = res.data;
-        console.log('New access token', access_token);
+        
         if (access_token) {
             await this.hostRepository.update({id: hostId}, {
                 spotifyToken: access_token

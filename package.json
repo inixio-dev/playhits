@@ -1,6 +1,6 @@
 {
   "name": "playhits",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "nx",
@@ -49,6 +49,7 @@
     "tslib": "^2.0.0",
     "typeorm": "^0.2.45",
     "typeorm-encrypted-column": "0.0.4",
+    "uuid": "^9.0.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

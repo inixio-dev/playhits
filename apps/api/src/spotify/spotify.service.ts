@@ -27,7 +27,7 @@ export class SpotifyService {
         return await this.authService.refreshSpotifyToken(refreshToken, userId);
     }
 
-    async getMyPlaylists(req: any, page: number = 0) {
+    async getMyPlaylists(req: any, page = 0) {
         const spotifyTokens = await this.getSpotifyTokens(req);
         try {
             const response = await axios.get(`https://api.spotify.com/v1/me/playlists?offset=${10*page}&limit=10`, {
@@ -43,7 +43,6 @@ export class SpotifyService {
                 await this.refreshToken(req.user.id, spotifyTokens.spotifyRefreshToken);
                 return await this.getMyPlaylists(req, page);
             } else {
-                console.log(JSON.stringify(err.response))
                 throw new Error();
             }
         };
@@ -70,7 +69,6 @@ export class SpotifyService {
                 await this.refreshToken(hostId, spotifyTokens.spotifyRefreshToken);
                 return await this.getSongsFromPlaylist(hostId, id, page, songs);
             } else {
-                console.log(err);
                 throw new Error();
             }
         };
@@ -102,7 +100,6 @@ export class SpotifyService {
                 message: '¡La canción se ha añadido a la cola! Sonará en breve'
             };
         } catch(err) {
-            console.log(err.response)
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.addSongToQueue(id, songUrl);
@@ -124,7 +121,6 @@ export class SpotifyService {
             });
             return response.data;
         } catch(err) {
-            console.log(err.response)
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.getQueue(id);
@@ -170,7 +166,6 @@ export class SpotifyService {
             });
             return response.data;
         } catch(err) {
-            console.log(err.response)
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.getRecentlyPlayed(id);
@@ -183,11 +178,8 @@ export class SpotifyService {
     async checkIfRecentlyPlayed(id: string, songUrl: string) {
         const recentlyPlayed = await this.getRecentlyPlayed(id);
         const played = recentlyPlayed.items.find(i => {
-            console.log(Object.keys(i.track))
-            console.log(i.track);
             i.track.uri === songUrl
         });
-        console.log(songUrl, played ? played.track.uri : 'No');
         return played;
     }
 

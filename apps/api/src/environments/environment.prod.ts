@@ -21,4 +21,3 @@ export const environment = {
   redirect_uri: 'http://localhost:4200/host'
 };
 
-console.log(environment.database);
