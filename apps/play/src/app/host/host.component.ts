@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
@@ -16,7 +17,7 @@ export class HostComponent implements OnInit {
 
   host?: HostDto;
   myPlaylists?: MyPlaylistsDto;
-  setOfCheckedId = new Set<any>();
+  setOfCheckedId = new Set<string>();
   currentPage = 1;
   appUrl = environment.appUrl;
 
@@ -26,13 +27,12 @@ export class HostComponent implements OnInit {
     this.hostService.getMyInfo().subscribe({
       next: (res: any) => {
         this.host = res;
-        console.log(this.host);
         this.host?.catalogues.forEach(c => this.setOfCheckedId.add(c.spotifyPlaylistId));
         this.route.queryParams.subscribe((qp) => {
-          const {code, status, error} = qp;
+          const {code} = qp;
           if (code) {
             this.authService.saveTokenFromCode(code).pipe(take(1)).subscribe({
-              next: (res) => {
+              next: () => {
                 window.location.reload();
               },
               error: () => {
@@ -41,7 +41,6 @@ export class HostComponent implements OnInit {
             });
           }
         });
-        console.log('Estoy aqui')
         this.authService.getMyPlaylists(this.currentPage).subscribe({
           next: (res: any) => {
             this.myPlaylists = res;
@@ -70,7 +69,7 @@ export class HostComponent implements OnInit {
       request = this.hostService.removeFromCatalogue(id);
     }
     request.pipe(take(1)).subscribe({
-      next: (res) => {
+      next: () => {
         if (selected) {
           this.setOfCheckedId.add(id);
         } else {
@@ -81,10 +80,6 @@ export class HostComponent implements OnInit {
         console.log(err);
       }
     })
-  }
-
-  onAllChecked(event: any) {
-    console.log('All checked', event)
   }
 
   changePage(newPage: number) {

@@ -12,19 +12,22 @@ import { Catalogue } from '../catalogue/entities/catalogue.entity';
 import { CatalogueModule } from '../catalogue/catalogue.module';
 import { AuthModule } from '../auth/auth.module';
 import { SpotifyModule } from '../spotify/spotify.module';
+import { Song } from '../song/entities/song.entity';
+import { SongModule } from '../song/song.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      entities: [Host, Catalogue],
+      entities: [Host, Catalogue, Song],
       synchronize: true,
       ...environment.database
     }),
     HostModule,
     CatalogueModule,
     AuthModule,
-    SpotifyModule
+    SpotifyModule,
+    SongModule
   ],
   controllers: [AppController],
   providers: [AppService, EncryptedColumnSubscriber],

@@ -11,6 +11,10 @@ export class CatalogueService {
         return this.http.get(`${environment.apiUrl}/host/${hostId}`).pipe(take(1));
     }
 
+    getSongsFromHost(hostId: string) {
+        return this.http.get(`${environment.apiUrl}/song?hostId=${hostId}`).pipe(take(1));
+    }
+
     getSongsFromPlaylist(hostId: string, playlistId: string) {
         return this.http.get(`${environment.apiUrl}/spotify/playlists/${hostId}/${playlistId}`).pipe(take(1));
     }

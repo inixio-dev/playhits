@@ -8,8 +8,8 @@ export class SearchSongPipe implements PipeTransform {
         }
         const term = searchTerm.toLowerCase();
         return songs.filter(s => {
-            const song = s.track.name.toLowerCase();
-            const artist = s.track.artists[0].name.toLowerCase();
+            const song = s.title.toLowerCase();
+            const artist = s.artist.toLowerCase();
             return song.includes(searchTerm) || artist.includes(searchTerm);
         })
     }

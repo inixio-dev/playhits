@@ -22,9 +22,7 @@ async function bootstrap() {
     app = await NestFactory.create(AppModule, {
       httpsOptions
     });
-    console.log('Running over HTTPS');
   } else {
-    console.log('Certs not found. Running over HTTP');
     app = await NestFactory.create(AppModule);
   }
   const globalPrefix = 'api';

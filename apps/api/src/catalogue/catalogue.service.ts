@@ -1,17 +1,16 @@
-import { Injectable, Req } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateCatalogueDto } from './dto/create-catalogue.dto';
+import { SongService } from '../song/song.service';
 import { Catalogue } from './entities/catalogue.entity';
 
 @Injectable()
 export class CatalogueService {
 
-  constructor(@InjectRepository(Catalogue) private catalogueRepository: Repository<Catalogue>) {}
+  constructor(@InjectRepository(Catalogue) private catalogueRepository: Repository<Catalogue>, private songsService: SongService) {}
 
-  create(createCatalogueDto: any, req: any) {
-    console.log(`Creando ${createCatalogueDto.name} (${createCatalogueDto.name.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '')})`)
-    return this.catalogueRepository.save([
+  async create(createCatalogueDto, req) {
+    const catalogue = await this.catalogueRepository.save([
       {
         spotifyPlaylistId: createCatalogueDto.id,
         name: createCatalogueDto.name.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, ''),
@@ -19,17 +18,12 @@ export class CatalogueService {
         host: req.user.host
       }
     ]);
+    await this.songsService.addSongsFromCatalogue(req.user.host, catalogue[0]);
+    return catalogue;
   }
 
-  findAll() {
-    return `This action returns all catalogue`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} catalogue`;
-  }
-
-  remove(spotifyPlaylistId: string) {
-    return this.catalogueRepository.delete({spotifyPlaylistId})
+  async remove(spotifyPlaylistId, req) {
+    await this.catalogueRepository.delete({host: req.user.host, spotifyPlaylistId});
+    return await this.songsService.remove(req.user.host, spotifyPlaylistId);
   }
 }

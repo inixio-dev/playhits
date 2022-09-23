@@ -3,10 +3,9 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor,
-  HttpResponse
+  HttpInterceptor
 } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -27,7 +26,6 @@ export class ApiAuthInterceptor implements HttpInterceptor {
 
   needsLogin() {
     const currentRoute = this.router.url;
-    console.log(currentRoute);
     return currentRoute === '/host';
   }
 }
