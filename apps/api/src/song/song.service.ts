@@ -25,11 +25,11 @@ export class SongService {
       },
       order: {
         title: 'ASC'
-      }
+      },
     });
     return songs.filter((s, i) => {
-      if (s[i-1]) {
-        return s.title !== s[i-1].title || s.artist !== s[i-1].artist;
+      if (songs[i-1]) {
+        return s.title !== songs[i-1].title || s.artist !== songs[i-1].artist;
       } else {
         return true;
       }
