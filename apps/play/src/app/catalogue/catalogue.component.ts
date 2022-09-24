@@ -19,7 +19,7 @@ export class CatalogueComponent implements OnInit {
   loading = true;
   showQR = true;
   appUrl = environment.appUrl;
-  canShare = navigator.canShare();
+  canShare = navigator.share !== undefined;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((qp) => {
@@ -80,15 +80,14 @@ export class CatalogueComponent implements OnInit {
   }
 
   async share() {
-    try {
+    if (this.canShare) {
       return await navigator.share({
         title: `PlayHits!`,
         text: `Pide tu canción favorita y haz que suene en el Spotify de ${this.host.name}`,
         url: `https://playhits.inixio.dev/catalogue?host=${this.hostId}`
       });
-    } catch(e) {
-      console.log(e);
-      alert(e);
+    } else {
+      return await navigator.clipboard.writeText(`https://playhits.inixio.dev/catalogue?host=${this.hostId}`)
     }
   }
 

@@ -7,8 +7,8 @@
                 <div class="qr-container">
                     <h2 class="share-title">PlayHits! de {{host.name}}</h2>
                     <qrcode [qrdata]="appUrl + '/catalogue?host=' + host.id" [errorCorrectionLevel]="'M'">Tu código QR</qrcode>
-                    <button (click)="share()" nz-button class="share-btn" nzType="primary" nzShape="round" style="background-color: white; margin-bottom: 4px;">Compartir link con amigos</button>
-                    <button *ngIf="canShare" (click)="closeQR()" nz-button class="share-btn" nzType="primary" nzShape="round" style="background-color: white;">Volver al catálogo</button>   
+                    <button  (click)="share()" nz-button class="share-btn" nzType="primary" nzShape="round" style="background-color: white; margin-bottom: 4px;">{{canShare ? 'Compartir link con amigos' : 'Copiar enlace'}}</button>
+                    <button (click)="closeQR()" nz-button class="share-btn" nzType="primary" nzShape="round" style="background-color: white;">Volver al catálogo</button>   
                 </div>
             </div>    
             <ng-template #catalogue>
