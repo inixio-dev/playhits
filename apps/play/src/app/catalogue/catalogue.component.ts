@@ -17,7 +17,7 @@ export class CatalogueComponent implements OnInit {
   songs?: any;
   searchTerm = '';
   loading = true;
-  showQR = true;
+  showQR = false;
   appUrl = environment.appUrl;
   canShare = navigator.share !== undefined;
 
