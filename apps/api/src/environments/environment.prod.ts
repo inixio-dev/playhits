@@ -18,6 +18,6 @@ export const environment = {
   jwtSecret: 'P14YH1T5',
   client_id: 'c89100b02cd741c893c8454d85cd931c',
   client_secret: 'd3e8874af8344fb48fbe718228dbc6cf',
-  redirect_uri: 'http://localhost:4200/host'
+  redirect_uri: 'https://playhits.inixio.dev/host'
 };
 
