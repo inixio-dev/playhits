@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
 import { CatalogueService } from './catalogue.service';
 
 @Component({
@@ -16,6 +17,9 @@ export class CatalogueComponent implements OnInit {
   songs?: any;
   searchTerm = '';
   loading = true;
+  showQR = false;
+  appUrl = environment.appUrl;
+  canShare = navigator.share !== undefined;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((qp) => {
@@ -66,5 +70,26 @@ export class CatalogueComponent implements OnInit {
     this.songs = null;
     this.searchTerm = '';
   }
+
+  toggleQR() {
+    this.showQR = true;
+  }
+
+  closeQR() {
+    this.showQR = false;
+  }
+
+  async share() {
+    if (this.canShare) {
+      return await navigator.share({
+        title: `PlayHits!`,
+        text: `Pide tu canción favorita y haz que suene en el Spotify de ${this.host.name}`,
+        url: `https://playhits.inixio.dev/catalogue?host=${this.hostId}`
+      });
+    } else {
+      return await navigator.clipboard.writeText(`https://playhits.inixio.dev/catalogue?host=${this.hostId}`)
+    }
+  }
+
 
 }

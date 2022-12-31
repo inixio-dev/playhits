@@ -84,8 +84,10 @@ export class SpotifyService {
         }
         const recentlyPlayed = await this.checkIfRecentlyPlayed(id, songUrl);
         if (recentlyPlayed) {
+            const timeAgo = parseInt(`${(new Date().getTime() - new Date(recentlyPlayed.played_at).getTime()) / 60000}`);
+            console.log(timeAgo);
             return {
-                message: 'Esta canción ha sonado hace poco. Prueba a pedir otra canción o espera un rato y pídela de nuevo'
+                message: `${timeAgo > 3 ? `Esta canción ha sonado hace ${timeAgo} minutos.` : 'Esta canción acaba de sonar.'} Prueba a pedir otra canción o espera un rato y pídela de nuevo`
             }
         }
         const spotifyTokens = await this.getSpotifyTokens({user: {id}});
@@ -138,22 +140,31 @@ export class SpotifyService {
         }
     }
 
-    async checkIfAlreadyInQueue(id: string, songUrl: string) {
+    async checkIfAlreadyInQueue(id: string, songUrl: string): Promise<boolean> {
         const queue = await this.getQueue(id);
-        
         if (queue.currently_playing && queue.currently_playing.uri === songUrl) {
             return true;
         }
-
-        const inQueue = queue.queue.find(t => t.uri === songUrl);
-
-        if (inQueue) {
-            return true;
-        }
-
-        return false;
-
+        return this.getIndexInQueue(queue, songUrl) >= 0;
     }
+
+    private getIndexInQueue(queue, songUrl: string) {
+        const inQueue = queue.queue.findIndex(t => {
+            return t.uri === songUrl
+        });
+        return inQueue;
+    }
+
+    private async getWaitingMinutes(id: string, songUrl: string) {
+        const queue = await this.getQueue(id);
+        const index = this.getIndexInQueue(queue, songUrl);
+        if (index === -1) {
+            return null;
+        }
+        const miliseconds = queue.queue.slice(0, index).reduce((p,c) => c = p + c.duration_ms, 0);
+        return parseInt(`${miliseconds/60/60}`);
+    }
+
 
     async getRecentlyPlayed(id: string) {
         const spotifyTokens = await this.getSpotifyTokens({user: {id}});
@@ -179,7 +190,7 @@ export class SpotifyService {
     async checkIfRecentlyPlayed(id: string, songUrl: string) {
         const recentlyPlayed = await this.getRecentlyPlayed(id);
         const played = recentlyPlayed.items.find(i => {
-            i.track.uri === songUrl
+            return i.track.uri === songUrl
         });
         return played;
     }

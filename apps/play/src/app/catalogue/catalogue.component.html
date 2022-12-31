@@ -3,9 +3,21 @@
         <!--Correctly navigated-->
         <div *ngIf="!loading; else loadingSpinner">
             <!--Already fetched catalogue-->
+            <div *ngIf="showQR; else catalogue" id="qr" class="grad">
+                <div class="qr-container">
+                    <h2 class="share-title">PlayHits! de {{host.name}}</h2>
+                    <qrcode [qrdata]="appUrl + '/catalogue?host=' + host.id" [errorCorrectionLevel]="'M'">Tu código QR</qrcode>
+                    <button  (click)="share()" nz-button class="share-btn" nzType="primary" nzShape="round" style="background-color: white; margin-bottom: 4px;">{{canShare ? 'Compartir link con amigos' : 'Copiar enlace'}}</button>
+                    <button (click)="closeQR()" nz-button class="share-btn" nzType="primary" nzShape="round" style="background-color: white;">Volver al catálogo</button>   
+                </div>
+            </div>    
+            <ng-template #catalogue>
                 <h3 class="catalogue-title">Catálogo de {{host.name}}</h3>
                 <div class="search-container">
                     <input class="search" [(ngModel)]="searchTerm" placeholder="Busca una canción o artista" />
+                    <button (click)="toggleQR()" nz-button nzType="primary" nzShape="round" class="grad">
+                        Compartir
+                    </button> 
                 </div>
                 <div class="song grad" *ngFor="let s of songs | searchSong:searchTerm">
                     <div class="song-info">
@@ -16,16 +28,8 @@
                         <i nz-icon nzType="plus-circle" nzTheme="fill"></i>
                     </div>
                 </div>
-            </div>
-            <!--<ng-template #catalogueslist>
-                <h3 class="catalogue-title">Catálogo de {{host.name}}</h3>
-                <div class="catalogue">
-                    <div (click)="getSongsFromPlaylist(c.spotifyPlaylistId)" class="catalogue-item grad" *ngFor="let c of host.catalogues">
-                        <img width="100%" height="100%" [src]="c.imageUrl"/>
-                        <div class="name">{{c.name}}</div>
-                    </div>
-                </div>
-            </ng-template>-->
+            </ng-template>
+        </div>
         <ng-template #loadingSpinner>
             <ngx-loading class="grad" [show]="true"></ngx-loading>
         </ng-template>

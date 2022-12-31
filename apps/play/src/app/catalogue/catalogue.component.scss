@@ -15,7 +15,7 @@
 .search-container {
     display: flex;
     padding: 0 10px;
-    margin: 5px 0;
+    margin: 5px 2px;
     padding-left: 10px;
     flex-direction: row;
     justify-content: center;
@@ -24,6 +24,7 @@
 .search {
     border-radius: 25px;
     width: 100%;
+    margin-right: 3px;
 }
 
 .catalogue-item {
@@ -93,4 +94,41 @@ img {
         line-height: 18px;
     }
 
+}
+
+#qr {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    border-radius: 25px;
+}
+
+qrcode {
+    width: 100%;
+}
+
+button {
+    font-family: Teko;
+    font-size: 20px;
+}
+
+.share-btn {
+    background-color: white !important;
+}
+
+.qr-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.share-title {
+    font-family: Teko;
+    color: white;
+    text-align: center;   
 }

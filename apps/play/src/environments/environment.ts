@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: `http://localhost:3333/api`,
+  apiUrl: `http://192.168.1.88:3333/api`,
   // apiUrl: `https://playhits.inixio.dev:3333/api`,
   appUrl: 'http://localhost:4200',
   client_id: 'c89100b02cd741c893c8454d85cd931c',

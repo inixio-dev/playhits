@@ -10,7 +10,7 @@ export class SearchSongPipe implements PipeTransform {
         return songs.filter(s => {
             const song = s.title.toLowerCase();
             const artist = s.artist.toLowerCase();
-            return song.includes(searchTerm) || artist.includes(searchTerm);
+            return song.includes(term) || artist.includes(term);
         })
     }
 }

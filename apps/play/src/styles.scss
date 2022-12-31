@@ -11,9 +11,13 @@ html, body {
 }
 
 
-.grad, .ant-btn, .cube1, .sk-cube {
+.grad, .cube1, .sk-cube {
     background-color: #d4418e !important;
     background-image: linear-gradient(315deg, #d4418e 0%, #6906c5 74%) !important;
+}
+
+.share-btn {
+    color: #6906c5 !important;
 }
 
 .ant-btn {
