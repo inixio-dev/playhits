@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Host } from "../../host/entities/host.entity";
+import { SongRequest } from "../../request/entities/request.entity";
 
 @Entity()
 export class Song {
@@ -24,4 +25,7 @@ export class Song {
 
     @ManyToOne(() => Host, (host) => host.songs)
     host: Host;
+
+    @OneToMany(() => SongRequest, request => request.song)
+    requests: SongRequest[];
 }

@@ -1,3 +1,4 @@
+<div #grafico></div>
 <div *ngIf="!host; else hostInfo">Cargando...</div>
 <ng-template #hostInfo>
     <div *ngIf="host && host.loggedInSpotify; else loginSpotify">
@@ -6,37 +7,85 @@
                 <qrcode [qrdata]="appUrl + '/catalogue?host=' + host.id" [width]="256" [errorCorrectionLevel]="'M'">Tu código QR</qrcode>
                 <p>Tu código QR</p>
             </div>    
-            <div class="table-container" *ngIf="myPlaylists && myPlaylists.items">
-                <nz-table
-                #rowSelectionTable
-                nzShowPagination
-                nzShowSizeChanger
-                [nzData]="myPlaylists.items"
-                [nzTotal]="myPlaylists.total"
-                [nzPageSize]="10"
-                [nzFrontPagination]="false"
-                [nzPageIndex]="currentPage"
-                (nzPageIndexChange)="changePage($event)"
-                >
-                <thead>
-                    <tr>
-                        <th [nzChecked]="setOfCheckedId.size === myPlaylists.total"> En catálogo</th>
-                        <th>Portada</th>
-                        <th>Título</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let playlist of myPlaylists.items">
-                    <td
-                        id="check"
-                        [nzChecked]="setOfCheckedId.has(playlist.id)"
-                        (nzCheckedChange)="onItemChecked(playlist.id, $event)"
-                    ></td>
-                    <td id="image"><img height="60px" width="60px" style="margin: 0;" [src]="playlist.images[0]?.url" (error)="loadDefaultCover($event)"/></td>
-                    <td>{{ playlist.name }}</td>
-                    </tr>
-                </tbody>
-                </nz-table>
+            <div class="tables">
+                <div class="table-container" *ngIf="myPlaylists && myPlaylists.items">
+                    <nz-table
+                    #rowSelectionTable
+                    nzShowPagination
+                    nzShowSizeChanger
+                    [nzData]="myPlaylists.items"
+                    [nzTotal]="myPlaylists.total"
+                    [nzPageSize]="10"
+                    [nzFrontPagination]="false"
+                    [nzPageIndex]="currentPage"
+                    (nzPageIndexChange)="changePage($event)"
+                    >
+                    <thead>
+                        <tr>
+                            <th [nzChecked]="setOfCheckedId.size === myPlaylists.total"> En catálogo</th>
+                            <th>Portada</th>
+                            <th>Título</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let playlist of myPlaylists.items">
+                        <td
+                            id="check"
+                            [nzChecked]="setOfCheckedId.has(playlist.id)"
+                            (nzCheckedChange)="onItemChecked(playlist.id, $event)"
+                        ></td>
+                        <td id="image"><img height="60px" width="60px" style="margin: 0;" [src]="playlist.images[0]?.url" (error)="loadDefaultCover($event)"/></td>
+                        <td>{{ playlist.name }}</td>
+                        </tr>
+                    </tbody>
+                    </nz-table>
+                </div>
+                <div class="table-container">
+                    <nz-tabset>
+                        <nz-tab nzTitle="Lista">
+                            <nz-table
+                    [nzData]="requests"
+                    [nzTotal]="requests.length"
+                    [nzPageSize]="10"
+                    
+                    >
+                    <thead>
+                        <tr>
+                            <th>
+                                Fecha
+                            </th>
+                            <th>
+                                Canción
+                            </th>
+                            <th>
+                                Resultado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let req of requests">
+                            <td>
+                                {{req.requestedAt | requestedAt}}
+                            </td>
+                            <td>
+                                {{req.song?.title}}<br>{{req.song?.artist}}
+                            </td>
+                            <td [class]="req.result">
+                                {{req.result | requestResult}}
+                            </td>
+                        </tr>
+                    </tbody>
+                    </nz-table>
+                        </nz-tab>
+                        <nz-tab nzTitle="Gráfico">
+                            <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="chartOptions"
+          ></highcharts-chart>
+                        </nz-tab>
+                    </nz-tabset>
+                    
+                </div>
             </div>
         </div>
     </div>

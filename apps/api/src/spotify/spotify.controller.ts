@@ -21,8 +21,8 @@ export class SpotifyController {
     }
 
     @Post('queue/:hostId')
-    async addSongToQueue(@Param('hostId') hostId: string, @Query('url') songUrl: string) {
-        return this.spotifyService.addSongToQueue(hostId, songUrl);
+    async addSongToQueue(@Param('hostId') hostId: string, @Query('url') songUrl: string, @Query('requester') requester: string) {
+        return this.spotifyService.addSongToQueue(hostId, songUrl, requester);
     }
 
     @Get('queue/:hostId')

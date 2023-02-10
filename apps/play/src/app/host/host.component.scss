@@ -17,8 +17,12 @@
     flex-grow: 1;
 }
 
+.tables {
+    display: flex;
+}
+
 .table-container {
-    width: 100%;
+    width: 50%;
     padding: 25px;
 }
 
@@ -33,4 +37,16 @@
 
 nz-table, table {
     max-width: 100%;
+}
+
+.ADDED {
+    color: green;
+}
+
+.ALREADY_IN_QUEUE, .RECENTLY_PLAYED, .USER_LIMIT_REACHED {
+    color: orange;
+}
+
+.FULL_QUEUE {
+    color: red;
 }

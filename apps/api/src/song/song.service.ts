@@ -64,7 +64,8 @@ export class SongService {
         spotifySongUrl: track.uri,
         title: track.name,
         artist: track.artists.map(a => a.name).join(', '),
-        host: h
+        host: h,
+        requests: []
       };
       return s;
     });

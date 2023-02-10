@@ -1,12 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ChartConfiguration, ChartType } from 'chart.js';
+import { SingleOrMultiDataSet } from 'ng2-charts';
 import { take } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { MyPlaylistsDto } from '../dtos/MyPlaylists.dto';
 import { HostDto } from './dto/host.dto';
+import { RequestDto } from './dto/request.dto';
 import { HostsService } from './hosts.service';
+import * as Highcharts from 'highcharts';
+import { RequestResult } from '../pipes/requestResult.pipe';
 
 @Component({
   selector: 'playhits-host',
@@ -20,13 +25,48 @@ export class HostComponent implements OnInit {
   setOfCheckedId = new Set<string>();
   currentPage = 1;
   appUrl = environment.appUrl;
+  requests: RequestDto[] = [];
+  Highcharts: typeof Highcharts = Highcharts;
+
+  public barChartLegend = true;
+  public barChartPlugins = [];
+
+  days = Array(7).fill(new Date()).map((d: Date, i) => {
+    const daysAgo = 1000*60*60*24*(6-i);
+    return new Date(d.getTime() - daysAgo).toLocaleDateString('es'); 
+  });
+  chartOptions: Highcharts.Options = {};
+
+
+  datasets: SingleOrMultiDataSet = 
+    [[ 65, 59, 80, 81, 56, 55, 40 ], [ 28, 48, 40, 19, 86, 27, 90 ]];
+
+  public barChartOptions: ChartConfiguration = {
+    data: {
+      labels: [ '2006', '2007', '2008', '2009', '2010', '2011', '2012' ],
+      datasets: [{label: ''}]
+    },
+    options: {
+      responsive: false
+    }
+  };
+
 
   constructor(private hostService: HostsService, private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+  console.log('Days', this.days);
+    this.hostService.getRequests().subscribe({
+      next: (res) => {
+        console.log('Requests', res);
+        this.requests = res as RequestDto[];
+        this.loadChart();
+      }
+    })
     this.hostService.getMyInfo().subscribe({
       next: (res: any) => {
         this.host = res;
+        this.loadChart();
         this.host?.catalogues.forEach(c => this.setOfCheckedId.add(c.spotifyPlaylistId));
         this.route.queryParams.subscribe((qp) => {
           const {code} = qp;
@@ -96,5 +136,69 @@ export class HostComponent implements OnInit {
 
   loadDefaultCover(event: any) {
     event.target.src = 'assets/default-cover.png';
+  }
+
+  loadChart() {
+    const byDay = this.requestsByDay();
+    this.chartOptions = {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Peticiones diarias',
+      },
+      xAxis: {
+        categories: this.days
+      },
+      yAxis: {
+        title: {
+          text: 'Peticiones'
+        },
+        stackLabels: {
+          enabled: true,
+          style: {
+            fontWeight: 'bold',
+            color: ( // theme
+                Highcharts.defaultOptions?.title?.style &&
+                Highcharts.defaultOptions?.title?.style.color
+            ) || 'gray',
+            textOutline: 'none'
+          }
+        },
+      },
+    plotOptions: {
+      column: {
+        stacking: 'normal'
+      }
+    },
+      series: [
+        {
+          name: 'Ya estaba en cola, ha sonado hace poco o el cliente ha llegado al límite',
+          data: byDay.map(day => day.filter(r => [RequestResult.ALREADY_IN_QUEUE, RequestResult.RECENTLY_PLAYED, RequestResult.USER_LIMIT_REACHED].includes(r.result)).length),
+          type: 'column',
+          color: 'orange'
+        },
+        {
+          name: 'Cola llena',
+          data: this.requestsByDay().map(day => day.filter(r => r.result === RequestResult.FULL_QUEUE).length),
+          type: 'column',
+          color: 'red'
+        },
+        {
+          name: 'Encoladas',
+          data: byDay.map(day => day.filter(r => r.result === RequestResult.ADDED).length),
+          type: 'column',
+          color: 'green'
+        },
+      ]
+    };
+  }
+
+  requestsByDay(): RequestDto[][] {
+    const byDay: RequestDto[][] = [];
+    this.days.forEach((day, i) => {
+      byDay[i] = this.requests.filter(r => new Date(r.requestedAt).toLocaleDateString('es') === day);
+    })
+    return byDay;
   }
 }

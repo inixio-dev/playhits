@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Controller, Post, Body, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, Param, Delete, UseGuards, Req, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CatalogueService } from './catalogue.service';
@@ -22,4 +22,5 @@ export class CatalogueController {
   remove(@Param('id') spotifyPlaylistId: string, @Req() req: any) {
     return this.catalogueService.remove(spotifyPlaylistId, req);
   }
+
 }

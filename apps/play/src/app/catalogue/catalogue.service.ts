@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { take } from "rxjs";
 import { environment } from "../../environments/environment";
+import { DeviceUUID } from 'device-uuid';
 
 @Injectable()
 export class CatalogueService {
@@ -20,6 +21,16 @@ export class CatalogueService {
     }
 
     addSongToQueue(hostId: string, songUrl: string) {
-        return this.http.post(`${environment.apiUrl}/spotify/queue/${hostId}?url=${songUrl}`, {}).pipe(take(1));
+        const uuid = this.getDeviceUUID();
+        return this.http.post(`${environment.apiUrl}/spotify/queue/${hostId}?url=${songUrl}&requester=${uuid}`, {}).pipe(take(1));
+    }
+
+    canAddSong(hostId: string) {
+        const uuid = this.getDeviceUUID();
+        return this.http.get(`${environment.apiUrl}/request/check?requester=${uuid}&host=${hostId}`);
+    }
+
+    private getDeviceUUID() {
+        return new DeviceUUID().get();
     }
 }

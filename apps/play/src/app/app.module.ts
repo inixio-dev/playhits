@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { HighchartsChartModule } from 'highcharts-angular';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CatalogueComponent } from './catalogue/catalogue.component';
@@ -28,6 +28,10 @@ import {
 } from '@ant-design/icons-angular/icons';
 import { SearchSongPipe } from './pipes/search.pipe';
 import { ngxLoadingAnimationTypes, NgxLoadingModule } from 'ngx-loading';
+import { RequestedAtPipe } from './pipes/requestedAt.pipe';
+import { RequestResultPipe } from './pipes/requestResult.pipe';
+import { ChartsModule } from 'ng2-charts';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 registerLocaleData(es);
 
 const routes: Routes = [
@@ -55,7 +59,9 @@ const routes: Routes = [
     CatalogueComponent,
     HostComponent,
     LoginComponent,
-    SearchSongPipe
+    SearchSongPipe,
+    RequestedAtPipe,
+    RequestResultPipe
   ],
   imports: [
     BrowserModule,
@@ -73,7 +79,10 @@ const routes: Routes = [
     NgxLoadingModule.forRoot({
       animationType: ngxLoadingAnimationTypes.cubeGrid
     }),
-    QRCodeModule
+    NzTabsModule,
+    QRCodeModule,
+    ChartsModule,
+    HighchartsChartModule
   ],
   providers: [
     { 

@@ -5,11 +5,21 @@ import axios from 'axios';
 import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { Host } from '../host/entities/host.entity';
+import { SongRequest } from '../request/entities/request.entity';
+import { RequestResult } from '../request/enums/request-result.enum';
+import { RequestService } from '../request/request.service';
+import { Song } from '../song/entities/song.entity';
 
 @Injectable()
 export class SpotifyService {
 
-    constructor(private authService: AuthService, @InjectRepository(Host) private hostsRpository: Repository<Host>, private http: HttpService) {}
+    constructor(
+        private authService: AuthService,
+        @InjectRepository(Host) private hostsRpository: Repository<Host>,
+        @InjectRepository(SongRequest) private requestRepository: Repository<SongRequest>,
+        @InjectRepository(Song) private songsRepository: Repository<Song>,
+        private http: HttpService,
+        private requestsSevice: RequestService) {}
 
     private async getSpotifyTokens(req) {
         const {id} = req.user;
@@ -74,9 +84,32 @@ export class SpotifyService {
         };
     }
 
-    async addSongToQueue(id: string, songUrl: string) {
+    async addSongToQueue(id: string, songUrl: string, requester: string) {
         const alreadyInQueue = await this.checkIfAlreadyInQueue(id, songUrl);
+        const host = await this.hostsRpository.findOne({id});
+        const request: SongRequest = new SongRequest();
+        const song: Song = await this.songsRepository.findOne({
+            spotifySongUrl: songUrl,
+            host
+        })
+        request.host = host;
+        request.song = song;
+        request.result = RequestResult.ADDED;
+        request.requester = requester;
+        const canBeAdded = await this.requestsSevice.canRequest(requester, host.username);
+        if (canBeAdded.code === 1002) {
+            request.result = RequestResult.FULL_QUEUE;
+            this.requestRepository.save(request);
+            return canBeAdded;
+        }
+        if (canBeAdded.code === 1003) {
+            request.result = RequestResult.USER_LIMIT_REACHED;
+            this.requestRepository.save(request);
+            return canBeAdded;
+        }
         if (alreadyInQueue) {
+            request.result = RequestResult.ALREADY_IN_QUEUE;
+            await this.requestRepository.save(request);
             return {
                 message: 'Esta canción ya está en la cola, sonará en breve'
             }
@@ -85,8 +118,12 @@ export class SpotifyService {
         if (recentlyPlayed) {
             const timeAgo = parseInt(`${(new Date().getTime() - new Date(recentlyPlayed.played_at).getTime()) / 60000}`);
             console.log(timeAgo);
-            return {
-                message: `${timeAgo > 3 ? `Esta canción ha sonado hace ${timeAgo} minutos.` : 'Esta canción acaba de sonar.'} Prueba a pedir otra canción o espera un rato y pídela de nuevo`
+            if (timeAgo < 30) {
+            request.result = RequestResult.RECENTLY_PLAYED;
+            await this.requestRepository.save(request);
+                return {
+                    message: `${timeAgo > 3 ? `Esta canción ha sonado hace ${timeAgo} minutos.` : 'Esta canción acaba de sonar.'} Prueba a pedir otra canción o espera un rato y pídela de nuevo`
+                }
             }
         }
         const spotifyTokens = await this.getSpotifyTokens({user: {id}});
@@ -98,13 +135,14 @@ export class SpotifyService {
                     'Accept': 'application/json'
                 }
             });
+            await this.requestRepository.save(request);
             return {
                 message: '¡La canción se ha añadido a la cola! Sonará en breve'
             };
         } catch(err) {
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
-                return await this.addSongToQueue(id, songUrl);
+                return await this.addSongToQueue(id, songUrl, requester);
             } else {
                 throw new Error();
             }

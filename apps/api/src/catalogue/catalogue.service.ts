@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { HostService } from '../host/host.service';
 import { SongService } from '../song/song.service';
 import { Catalogue } from './entities/catalogue.entity';
 
 @Injectable()
 export class CatalogueService {
 
-  constructor(@InjectRepository(Catalogue) private catalogueRepository: Repository<Catalogue>, private songsService: SongService) {}
+  constructor(
+    @InjectRepository(Catalogue) private catalogueRepository: Repository<Catalogue>,
+    private songsService: SongService,
+    private hostService: HostService) {}
 
   async create(createCatalogueDto, req) {
     const catalogue = await this.catalogueRepository.save([
@@ -26,4 +30,5 @@ export class CatalogueService {
     await this.catalogueRepository.delete({host: req.user.host, spotifyPlaylistId});
     return await this.songsService.remove(req.user.host, spotifyPlaylistId);
   }
+
 }

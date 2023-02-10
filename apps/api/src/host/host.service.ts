@@ -24,7 +24,8 @@ export class HostService {
         name: host.name,
         username: host.username,
         catalogues: host.catalogues,
-        id: host.id
+        id: host.id,
+        canAddSongs: host.canAddSongs
       }
     });
     if (!host) {
@@ -40,6 +41,12 @@ export class HostService {
     return this.hostsRepository.find({
       relations: ['catalogues']
     });
+  }
+
+  toggle(host: Host) {
+    host.canAddSongs = !host.canAddSongs;
+    this.hostsRepository.save(host);
+    return this.findOne(host.username);
   }
 
   async populate() {

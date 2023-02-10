@@ -14,6 +14,10 @@ export class HostsService {
     return this.http.get(`${environment.apiUrl}/auth/me`).pipe(take(1));
   }
 
+  getRequests() {
+    return this.http.get(`${environment.apiUrl}/request`).pipe(take(1));
+  }
+
   addToCatalogue(playlist: any) {
     return this.http.post(`${environment.apiUrl}/catalogue`, playlist);
   }
