@@ -49,6 +49,7 @@ export class SpotifyService {
             });
             return response.data;
         } catch(err) {
+            console.log(err);
             if (err.response.status === 401) {
                 await this.refreshToken(req.user.id, spotifyTokens.spotifyRefreshToken);
                 return await this.getMyPlaylists(req, page);
