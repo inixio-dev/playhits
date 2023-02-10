@@ -50,6 +50,7 @@ export class SpotifyService {
             return response.data;
         } catch(err) {
             console.log(err);
+            console.log('[GET PLAYLISTS]',err);
             if (err.response.status === 401) {
                 await this.refreshToken(req.user.id, spotifyTokens.spotifyRefreshToken);
                 return await this.getMyPlaylists(req, page);
@@ -76,6 +77,7 @@ export class SpotifyService {
                 return response.data;
             }
         } catch(err) {
+            console.log('[GET SONGS FROM QUEUE]',err);
             if (err.response?.status === 401) {
                 await this.refreshToken(hostId, spotifyTokens.spotifyRefreshToken);
                 return await this.getSongsFromPlaylist(hostId, id, page, songs);
@@ -141,7 +143,8 @@ export class SpotifyService {
                 message: '¡La canción se ha añadido a la cola! Sonará en breve'
             };
         } catch(err) {
-            if (err.response.status === 401) {
+            console.log('[POST] song to queue',err);
+            if (err.response?.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.addSongToQueue(id, songUrl, requester);
             } else {
@@ -162,6 +165,7 @@ export class SpotifyService {
             });
             return response.data;
         } catch(err) {
+            console.log('[GET QUEUE]',err);
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.getQueue(id);
@@ -216,6 +220,7 @@ export class SpotifyService {
             });
             return response.data;
         } catch(err) {
+            console.log('[GET RECENTLY PLAYED]',err);
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.getRecentlyPlayed(id);
