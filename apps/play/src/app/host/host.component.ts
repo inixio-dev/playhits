@@ -26,6 +26,7 @@ export class HostComponent implements OnInit {
   currentPage = 1;
   appUrl = environment.appUrl;
   requests: RequestDto[] = [];
+  requestsToDisplay: RequestDto[] = [];
   requestPageIndex = 1;
   Highcharts: typeof Highcharts = Highcharts;
 
@@ -37,7 +38,7 @@ export class HostComponent implements OnInit {
     return new Date(d.getTime() - daysAgo).toLocaleDateString('es'); 
   });
   chartOptions: Highcharts.Options = {};
-
+  uniqueUsersChartOptions: Highcharts.Options = {};
 
   datasets: SingleOrMultiDataSet = 
     [[ 65, 59, 80, 81, 56, 55, 40 ], [ 28, 48, 40, 19, 86, 27, 90 ]];
@@ -61,6 +62,7 @@ export class HostComponent implements OnInit {
       next: (res) => {
         console.log('Requests', res);
         this.requests = res as RequestDto[];
+        this.requestsToDisplay = this.requests.slice((this.requestPageIndex - 1)*10, this.requestPageIndex*10);
         this.loadChart();
       }
     })
@@ -137,14 +139,7 @@ export class HostComponent implements OnInit {
 
   changeRequestsPage(newPage: number) {
     this.requestPageIndex = newPage;
-    this.hostService.getRequests().subscribe({
-      next: (res: any) => {
-        this.requests = res as RequestDto[];
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+    this.requestsToDisplay = this.requests.slice((this.requestPageIndex - 1)*10, this.requestPageIndex*10);
   }
 
   loadDefaultCover(event: any) {
@@ -155,7 +150,7 @@ export class HostComponent implements OnInit {
     const byDay = this.requestsByDay();
     this.chartOptions = {
       chart: {
-        type: 'column'
+        type: 'column',
       },
       title: {
         text: 'Peticiones diarias',
@@ -211,6 +206,24 @@ export class HostComponent implements OnInit {
         },
       ]
     };
+    this.uniqueUsersChartOptions = {
+      chart: {
+        type: 'line'
+      },
+      title: {
+        text: 'Usuarios únicos'
+      },
+      xAxis: {
+        categories: this.days
+      },
+      series: [
+        {
+          name: 'Usuarios únicos',
+          type: 'line',
+          data: byDay.map(day => new Set(day.map(d => d.requester)).size)
+        }
+      ]
+    }
   }
 
   requestsByDay(): RequestDto[][] {

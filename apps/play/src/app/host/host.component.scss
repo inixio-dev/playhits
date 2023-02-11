@@ -19,11 +19,22 @@
 
 .tables {
     display: flex;
+    flex-direction: row;
 }
 
+@media (max-width: 800px) {
+    .tables {
+      flex-direction: column;
+    }
+  }
+
 .table-container {
-    width: 50%;
     padding: 25px;
+    width: 100%;
+}
+
+.ant-tabs-tabpane {
+    overflow: scroll;
 }
 
 #image {
@@ -37,6 +48,20 @@
 
 nz-table, table {
     max-width: 100%;
+}
+
+highcharts-chart {
+    max-width: 100%;
+    overflow: scroll !important;
+}
+
+.ant-tabs-content-holder {
+    overflow: scroll;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .ADDED {

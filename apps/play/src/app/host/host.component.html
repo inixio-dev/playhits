@@ -44,7 +44,7 @@
                     <nz-tabset>
                         <nz-tab nzTitle="Lista">
                             <nz-table
-                                [nzData]="requests"
+                                [nzData]="requestsToDisplay"
                                 [nzTotal]="requests.length"
                                 [nzPageSize]="10"
                                 [nzPageIndex]="requestPageIndex"
@@ -65,7 +65,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let req of requests">
+                                    <tr *ngFor="let req of requestsToDisplay">
                                         <td>
                                             {{req.requestedAt | requestedAt}}
                                         </td>
@@ -79,11 +79,17 @@
                                 </tbody>
                             </nz-table>
                         </nz-tab>
-                        <nz-tab nzTitle="Gráfico">
-                            <highcharts-chart 
-                                [Highcharts]="Highcharts"
-                                [options]="chartOptions"
-                            ></highcharts-chart>
+                        <nz-tab class="chart-tab" nzTitle="Gráfico">
+                            <div class="chart-container">
+                                <highcharts-chart 
+                                    [Highcharts]="Highcharts"
+                                    [options]="chartOptions"
+                                ></highcharts-chart>
+                                <highcharts-chart 
+                                    [Highcharts]="Highcharts"
+                                    [options]="uniqueUsersChartOptions"
+                                ></highcharts-chart>
+                            </div>
                         </nz-tab>
                     </nz-tabset>
                     
