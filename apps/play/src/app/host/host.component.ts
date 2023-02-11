@@ -173,16 +173,22 @@ export class HostComponent implements OnInit {
     },
       series: [
         {
-          name: 'Ya estaba en cola, ha sonado hace poco o el cliente ha llegado al límite',
-          data: byDay.map(day => day.filter(r => [RequestResult.ALREADY_IN_QUEUE, RequestResult.RECENTLY_PLAYED, RequestResult.USER_LIMIT_REACHED].includes(r.result)).length),
-          type: 'column',
-          color: 'orange'
-        },
-        {
           name: 'Cola llena',
           data: this.requestsByDay().map(day => day.filter(r => r.result === RequestResult.FULL_QUEUE).length),
           type: 'column',
           color: 'red'
+        },
+        {
+          name: 'El cliente ha alcanzado su límite',
+          data: byDay.map(day => day.filter(r => RequestResult.USER_LIMIT_REACHED === r.result).length),
+          type: 'column',
+          color: 'orange'
+        },
+        {
+          name: 'Ya estaba en cola o ha sonado hace poco',
+          data: byDay.map(day => day.filter(r => [RequestResult.ALREADY_IN_QUEUE, RequestResult.RECENTLY_PLAYED].includes(r.result)).length),
+          type: 'column',
+          color: '#FFCE44'
         },
         {
           name: 'Encoladas',

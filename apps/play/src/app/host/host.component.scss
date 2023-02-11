@@ -43,7 +43,11 @@ nz-table, table {
     color: green;
 }
 
-.ALREADY_IN_QUEUE, .RECENTLY_PLAYED, .USER_LIMIT_REACHED {
+.ALREADY_IN_QUEUE, .RECENTLY_PLAYED {
+    color: #FFCE44;
+}
+
+.USER_LIMIT_REACHED {
     color: orange;
 }
 
