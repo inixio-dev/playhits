@@ -137,7 +137,7 @@ export class HostComponent implements OnInit {
 
   changeRequestsPage(newPage: number) {
     this.requestPageIndex = newPage;
-    this.hostService.getRequests(this.currentPage - 1).subscribe({
+    this.hostService.getRequests().subscribe({
       next: (res: any) => {
         this.requests = res as RequestDto[];
       },
