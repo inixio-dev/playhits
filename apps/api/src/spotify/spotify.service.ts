@@ -143,7 +143,7 @@ export class SpotifyService {
                 message: '¡La canción se ha añadido a la cola! Sonará en breve'
             };
         } catch(err) {
-            console.log('[POST] song to queue',err);
+            console.log('[POST] song to queue',err.response.data.error.message);
             if (err.response?.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.addSongToQueue(id, songUrl, requester);
