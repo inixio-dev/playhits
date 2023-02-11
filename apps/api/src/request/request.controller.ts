@@ -16,7 +16,7 @@ export class RequestController {
   @Get()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async getMyPlaylists(@Req() req: any) {
-      return this.requestService.getRequestsInHost(req);
+  async getMyPlaylists(@Req() req: any, @Query('page') page: number) {
+      return this.requestService.getRequestsInHost(req, page);
   }
 }

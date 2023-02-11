@@ -26,6 +26,7 @@ export class HostComponent implements OnInit {
   currentPage = 1;
   appUrl = environment.appUrl;
   requests: RequestDto[] = [];
+  requestPageIndex = 1;
   Highcharts: typeof Highcharts = Highcharts;
 
   public barChartLegend = true;
@@ -127,6 +128,18 @@ export class HostComponent implements OnInit {
     this.authService.getMyPlaylists(this.currentPage).subscribe({
       next: (res: any) => {
         this.myPlaylists = res;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  changeRequestsPage(newPage: number) {
+    this.requestPageIndex = newPage;
+    this.hostService.getRequests(this.currentPage - 1).subscribe({
+      next: (res: any) => {
+        this.requests = res as RequestDto[];
       },
       error: (err) => {
         console.log(err);

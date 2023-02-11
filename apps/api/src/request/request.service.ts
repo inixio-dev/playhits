@@ -74,7 +74,7 @@ export class RequestService {
         }
     }
 
-    async getRequestsInHost(req) {
+    async getRequestsInHost(req, page = 0) {
         const {id} = req.user;
         const host = await this.hostRepository.findOne({id});
         const oneWeek = 1000 * 60 * 60 * 24 * 7;
@@ -90,7 +90,9 @@ export class RequestService {
             relations: ['song'],
             order: {
                 requestedAt: 'DESC'
-            }
+            },
+            skip: page * 10,
+            take: 10
         });
     }
 }

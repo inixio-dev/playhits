@@ -44,44 +44,46 @@
                     <nz-tabset>
                         <nz-tab nzTitle="Lista">
                             <nz-table
-                    [nzData]="requests"
-                    [nzTotal]="requests.length"
-                    [nzPageSize]="10"
-                    
-                    >
-                    <thead>
-                        <tr>
-                            <th>
-                                Fecha
-                            </th>
-                            <th>
-                                Canción
-                            </th>
-                            <th>
-                                Resultado
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let req of requests">
-                            <td>
-                                {{req.requestedAt | requestedAt}}
-                            </td>
-                            <td>
-                                {{req.song?.title}}<br>{{req.song?.artist}}
-                            </td>
-                            <td [class]="req.result">
-                                {{req.result | requestResult}}
-                            </td>
-                        </tr>
-                    </tbody>
-                    </nz-table>
+                                [nzData]="requests"
+                                [nzTotal]="requests.length"
+                                [nzPageSize]="10"
+                                [nzPageIndex]="requestPageIndex"
+                                [nzFrontPagination]="false"
+                                (nzPageIndexChange)="changeRequestsPage($event)"
+                                >
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Fecha
+                                        </th>
+                                        <th>
+                                            Canción
+                                        </th>
+                                        <th>
+                                            Resultado
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let req of requests">
+                                        <td>
+                                            {{req.requestedAt | requestedAt}}
+                                        </td>
+                                        <td>
+                                            {{req.song?.title}}<br>{{req.song?.artist}}
+                                        </td>
+                                        <td [class]="req.result">
+                                            {{req.result | requestResult}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
                         </nz-tab>
                         <nz-tab nzTitle="Gráfico">
                             <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="chartOptions"
-          ></highcharts-chart>
+                                [Highcharts]="Highcharts"
+                                [options]="chartOptions"
+                            ></highcharts-chart>
                         </nz-tab>
                     </nz-tabset>
                     
