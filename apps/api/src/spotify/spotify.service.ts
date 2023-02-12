@@ -50,7 +50,7 @@ export class SpotifyService {
             return response.data;
         } catch(err) {
             console.log(err);
-            console.log('[GET PLAYLISTS]',err);
+            console.log('[GET PLAYLISTS]', err?.response?.data?.error?.message);
             if (err.response.status === 401) {
                 await this.refreshToken(req.user.id, spotifyTokens.spotifyRefreshToken);
                 return await this.getMyPlaylists(req, page);
@@ -77,7 +77,7 @@ export class SpotifyService {
                 return response.data;
             }
         } catch(err) {
-            console.log('[GET SONGS FROM QUEUE]',err);
+            console.log('[GET SONGS FROM QUEUE]', err?.response?.data?.error?.message);
             if (err.response?.status === 401) {
                 await this.refreshToken(hostId, spotifyTokens.spotifyRefreshToken);
                 return await this.getSongsFromPlaylist(hostId, id, page, songs);
@@ -143,7 +143,7 @@ export class SpotifyService {
                 message: '¡La canción se ha añadido a la cola! Sonará en breve'
             };
         } catch(err) {
-            console.log('[POST] song to queue',err.response.data.error.message);
+            console.log('[POST] song to queue', err?.response?.data?.error?.message);
             if (err.response?.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.addSongToQueue(id, songUrl, requester);
@@ -165,7 +165,7 @@ export class SpotifyService {
             });
             return response.data;
         } catch(err) {
-            console.log('[GET QUEUE]',err);
+            console.log('[GET QUEUE]', err?.response?.data?.error?.message);
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.getQueue(id);
@@ -220,7 +220,7 @@ export class SpotifyService {
             });
             return response.data;
         } catch(err) {
-            console.log('[GET RECENTLY PLAYED]',err);
+            console.log('[GET RECENTLY PLAYED]', err?.response?.data?.error?.message);
             if (err.response.status === 401) {
                 await this.refreshToken(id, spotifyTokens.spotifyRefreshToken);
                 return await this.getRecentlyPlayed(id);

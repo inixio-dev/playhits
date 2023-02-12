@@ -37,6 +37,7 @@ export class HostComponent implements OnInit {
     const daysAgo = 1000*60*60*24*(6-i);
     return new Date(d.getTime() - daysAgo).toLocaleDateString('es'); 
   });
+  byDayOffset = 12;
   chartOptions: Highcharts.Options = {};
   uniqueUsersChartOptions: Highcharts.Options = {};
 
@@ -155,6 +156,9 @@ export class HostComponent implements OnInit {
       title: {
         text: 'Peticiones diarias',
       },
+      subtitle: {
+        text: 'Por noche. '
+      },
       xAxis: {
         categories: this.days
       },
@@ -229,7 +233,7 @@ export class HostComponent implements OnInit {
   requestsByDay(): RequestDto[][] {
     const byDay: RequestDto[][] = [];
     this.days.forEach((day, i) => {
-      byDay[i] = this.requests.filter(r => new Date(r.requestedAt).toLocaleDateString('es') === day);
+      byDay[i] = this.requests.filter(r => new Date(new Date(r.requestedAt).getTime() - this.byDayOffset * 1000 * 60 * 60).toLocaleDateString('es') === day);
     })
     return byDay;
   }
