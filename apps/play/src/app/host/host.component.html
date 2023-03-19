@@ -70,7 +70,12 @@
                                             {{req.requestedAt | requestedAt}}
                                         </td>
                                         <td>
-                                            {{req.song?.title}}<br>{{req.song?.artist}}
+                                            <div *ngIf="req.song; else deletedSong">
+                                                {{req.song?.title}}<br>{{req.song?.artist}}
+                                            </div>
+                                            <ng-template #deletedSong>
+                                                [Canción eliminada del catálogo]
+                                            </ng-template>
                                         </td>
                                         <td [class]="req.result">
                                             {{req.result | requestResult}}

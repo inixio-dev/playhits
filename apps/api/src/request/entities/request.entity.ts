@@ -11,7 +11,10 @@ export class SongRequest {
     @ManyToOne(() => Host, (host) => host.requests)
     host: Host;
 
-    @ManyToOne(() => Song, (song) => song.requests)
+    @ManyToOne(() => Song, (song) => song.requests, {
+        nullable: true,
+        onDelete: 'SET NULL'
+    })
     song: Song;
 
     @Column()
